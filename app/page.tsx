@@ -82,16 +82,22 @@ export default function TechStackIcons() {
   )
 
   const copyToClipboard = useCallback(
-    async (name: string) => {
-      const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/\.+/g, '').replace(/[^a-z0-9-]/g, '')
-      const url = `https://iconic-api.onrender.com/${isDarkMode ? 'dark' : 'light'}/${slug}`
-      const imgTag = `<img src="${url}" width="64px" />`;
+    async (icon: { name: string; file?: string }) => {
+      const fileName = icon.file ?? `${icon.name.toLowerCase().replace(/\s+|_/g, '-')}.svg`
+      const url = `https://raw.githubusercontent.com/MED-007/MEDIcons/main/icons/${encodeURIComponent(fileName)}`
+      let styleAttr = '';
+      if (iconStyle !== 'none') {
+        const radius = iconStyle === 'circle' ? '50%' : '10px'
+        const bg = iconTheme === 'dark' ? '#1F2937' : iconTheme === 'light' ? '#ffffff' : 'transparent'
+        styleAttr = ` style="background:${bg};border-radius:${radius};padding:8px;"`
+      }
+      const imgTag = `<img src="${url}" width="64px"${styleAttr} />`;
       try {
         await navigator.clipboard.writeText(imgTag)
-        setCopiedIcon(name)
+        setCopiedIcon(icon.name)
         toast({
           title: "Copied!",
-          description: `${name} image tag copied to clipboard`,
+          description: `${icon.name} image tag copied to clipboard`,
         })
         setTimeout(() => setCopiedIcon(null), 2000)
       } catch (err) {
@@ -323,7 +329,7 @@ export default function TechStackIcons() {
                   ? "border-[#E63946] bg-[#E63946]/5 copy-success"
                   : "border-gray-200 hover:border-[#E63946]/50"
               } ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white"}`}
-              onClick={() => copyToClipboard(icon.name)}
+              onClick={() => copyToClipboard(icon)}
             >
               <div className="flex flex-col items-center space-y-2">
                 <div
@@ -347,7 +353,7 @@ export default function TechStackIcons() {
                 </div>
                 <div className="flex items-center justify-center gap-2 w-full mt-2">
                   <Copy
-                    onClick={(e) => { e.stopPropagation(); copyToClipboard(icon.name) }}
+                    onClick={(e) => { e.stopPropagation(); copyToClipboard(icon) }}
                     className="w-4 h-4 text-gray-400 hover:text-[#E63946] cursor-pointer transition-colors"
                   />
                   <Download
