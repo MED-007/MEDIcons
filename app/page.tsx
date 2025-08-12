@@ -160,7 +160,7 @@ export default function TechStackIcons() {
 
   const getShapeClass = () => {
     if (iconStyle === 'circle') return 'rounded-full overflow-hidden p-2 bg-gray-100 dark:bg-gray-700'
-    if (iconStyle === 'rect') return 'rounded-[10px] overflow-hidden'
+    if (iconStyle === 'rect') return 'rounded-[10px] overflow-hidden p-2'
     return ''
   }
 
@@ -179,10 +179,10 @@ export default function TechStackIcons() {
             <span className="text-gray-800 dark:text-gray-100">MedIcons</span>
           </a>
           <nav className="flex items-center gap-6 text-base font-semibold text-gray-700 dark:text-gray-200">
-            <a href="https://github.com/MED-007" target="_blank" rel="noopener" className="flex items-center gap-1 hover:text-[#E63946]">
+            <a href="https://github.com/MED-007/MEDIcons" target="_blank" rel="noopener" className="flex items-center gap-1 hover:text-[#E63946]">
               <Github className="w-4 h-4" /> GitHub
             </a>
-            <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener" className="flex items-center gap-1 hover:text-[#E63946]">
+            <a href="https://www.linkedin.com/in/mohamed-laaguidi-b03236207/" target="_blank" rel="noopener" className="flex items-center gap-1 hover:text-[#E63946]">
               <Linkedin className="w-4 h-4" /> LinkedIn
             </a>
           </nav>
