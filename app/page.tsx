@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Search, Upload, Copy, Check, Sun, Moon, ChevronDown, Github, Linkedin } from "lucide-react"
+import { Search, Upload, Copy, Download, Check, Sun, Moon, ChevronDown, Github, Linkedin } from "lucide-react"
 import * as Select from "@radix-ui/react-select"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -151,6 +151,18 @@ export default function TechStackIcons() {
     },
     [toast],
   )
+
+  const downloadIcon = (icon: { name: string; svg: string }) => {
+    const blob = new Blob([icon.svg], { type: 'image/svg+xml' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${icon.name}.svg`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
+  }
 
   const getThemeBgClass = () => {
     if (iconTheme === 'light') return 'bg-white'
@@ -306,14 +318,14 @@ export default function TechStackIcons() {
           {filteredIcons.map((icon, index) => (
             <Card
               key={`${icon.name}-${index}`}
-              className={`p-6 cursor-pointer icon-hover border-2 transition-all duration-200 ${
+              className={`p-4 cursor-pointer icon-hover border-2 transition-all duration-200 ${
                 copiedIcon === icon.name
                   ? "border-[#E63946] bg-[#E63946]/5 copy-success"
                   : "border-gray-200 hover:border-[#E63946]/50"
               } ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white"}`}
               onClick={() => copyToClipboard(icon.name)}
             >
-              <div className="flex flex-col items-center space-y-3">
+              <div className="flex flex-col items-center space-y-2">
                 <div
                   className={`${getSizeClass()} ${getShapeClass()} ${getThemeBgClass()} text-gray-700 dark:text-gray-300 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full`}
                   dangerouslySetInnerHTML={{ __html: icon.svg }}
@@ -324,12 +336,25 @@ export default function TechStackIcons() {
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{(icon as any).category}</p>
                   )}
                 </div>
-                <div className="flex items-center justify-center w-6 h-6">
-                  {copiedIcon === icon.name ? (
-                    <Check className="w-4 h-4 text-[#E63946]" />
-                  ) : (
-                    <Copy className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  )}
+                {/* Copy status dots */}
+                <div className="flex items-center gap-5 mt-5">
+                  <span
+                    className={`w-3 h-3 rounded-full ${copiedIcon === icon.name ? 'bg-gradient-to-br from-green-400 via-green-500 to-green-600 shadow-lg shadow-green-500/60 animate-pulse' : 'bg-gray-500'}`}
+                  />
+                  <span
+                    className={`w-3 h-3 rounded-full ${copiedIcon === icon.name ? 'bg-gray-500' : 'bg-gradient-to-br from-red-400 via-red-500 to-red-600 shadow-lg shadow-red-500/60 animate-pulse'}`}
+                  />
+                </div>
+                <div className="flex items-center justify-center gap-2 w-full mt-2">
+                  <Copy
+                    onClick={(e) => { e.stopPropagation(); copyToClipboard(icon.name) }}
+                    className="w-4 h-4 text-gray-400 hover:text-[#E63946] cursor-pointer transition-colors"
+                  />
+                  <Download
+                    onClick={(e) => { e.stopPropagation(); downloadIcon(icon) }}
+                    className="w-4 h-4 text-gray-400 hover:text-[#E63946] cursor-pointer transition-colors"
+                  />
+                  
                 </div>
               </div>
             </Card>
