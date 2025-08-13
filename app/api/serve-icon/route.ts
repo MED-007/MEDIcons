@@ -59,10 +59,16 @@ export async function GET(request: Request) {
       }
     }
 
-    // Inline original SVG to avoid <image> base64 issues on some platforms
-    // Strip existing XML prolog to embed cleanly
+    // Inline original SVG and center/scale it within the background so it is not stuck at top-left
+    // Strip XML prolog and extract inner <svg> content only
     svgData = svgData.replace(/<\?xml[^>]*?>/i, '').trim()
-    const wrapped = `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="${size}px" height="${size}px" viewBox="0 0 ${size} ${size}">\n  ${background}\n  ${svgData}\n</svg>`
+    // Remove outer <svg ...> tag to embed raw paths
+    const inner = svgData.replace(/<svg[^>]*?>/i, '').replace(/<\/svg>/i, '').trim()
+
+    const scale = (size * 0.6) / 24; // 60% of canvas, assuming original icons use 24×24
+    const offset = (size - 24 * scale) / 2;
+
+    const wrapped = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">\n  ${background}\n  <g transform="translate(${offset} ${offset}) scale(${scale})">\n    ${inner}\n  </g>\n</svg>`
 
     return new NextResponse(wrapped, {
       status: 200,

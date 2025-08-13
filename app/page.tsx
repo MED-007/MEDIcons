@@ -84,7 +84,7 @@ export default function TechStackIcons() {
   const copyToClipboard = useCallback(
     async (icon: { name: string; file?: string }) => {
       const fileName = icon.file ?? `${icon.name.toLowerCase().replace(/\s+|_/g, '-')}.svg`
-      const base = typeof window !== 'undefined' ? window.location.origin : ''
+      const base = (process.env.NEXT_PUBLIC_BASE_URL as string | undefined) ?? (typeof window !== 'undefined' ? window.location.origin : '')
       const url = `${base}/api/serve-icon?file=${encodeURIComponent(fileName)}&theme=${iconTheme}&style=${iconStyle}&size=64`;
       const imgTag = `<img src="${url}" width="64px" />`;
       try {
@@ -103,7 +103,7 @@ export default function TechStackIcons() {
         })
       }
     },
-    [toast],
+    [toast, iconStyle, iconTheme],
   )
 
   const handleFileUpload = useCallback(
@@ -150,7 +150,7 @@ export default function TechStackIcons() {
       }
       reader.readAsText(file)
     },
-    [toast],
+    [toast, iconStyle, iconTheme],
   )
 
   const downloadIcon = (icon: { name: string; svg: string }) => {
