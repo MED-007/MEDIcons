@@ -9,7 +9,7 @@ export async function GET() {
     const iconsDir = path.join(process.cwd(), 'icons')
     const files = await fs.readdir(iconsDir)
 
-    const icons = await Promise.all(
+    let icons = await Promise.all(
       files
         .filter((f) => f.toLowerCase().endsWith('.svg'))
         .map(async (file) => {
@@ -22,6 +22,9 @@ export async function GET() {
           return { name, svg, file }
         }),
     )
+
+    // Ensure consistent alphabetical ordering regardless of filesystem implementation
+    icons = icons.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
 
     return NextResponse.json(icons)
   } catch (err) {
