@@ -84,14 +84,9 @@ export default function TechStackIcons() {
   const copyToClipboard = useCallback(
     async (icon: { name: string; file?: string }) => {
       const fileName = icon.file ?? `${icon.name.toLowerCase().replace(/\s+|_/g, '-')}.svg`
-      const url = `https://raw.githubusercontent.com/MED-007/MEDIcons/main/icons/${encodeURIComponent(fileName)}`
-      let styleAttr = '';
-      if (iconStyle !== 'none') {
-        const radius = iconStyle === 'circle' ? '50%' : '10px'
-        const bg = iconTheme === 'dark' ? '#1F2937' : iconTheme === 'light' ? '#ffffff' : 'transparent'
-        styleAttr = ` style="background:${bg};border-radius:${radius};padding:8px;"`
-      }
-      const imgTag = `<img src="${url}" width="64px"${styleAttr} />`;
+      const base = typeof window !== 'undefined' ? window.location.origin : ''
+      const url = `${base}/api/serve-icon?file=${encodeURIComponent(fileName)}&theme=${iconTheme}&style=${iconStyle}&size=64`;
+      const imgTag = `<img src="${url}" width="64px" />`;
       try {
         await navigator.clipboard.writeText(imgTag)
         setCopiedIcon(icon.name)
