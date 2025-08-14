@@ -142,18 +142,20 @@ export default function TechStackIcons() {
     <div
       className={`min-h-screen transition-colors duration-300 ${isDarkMode ? "bg-black/90 text-gray-100" : "bg-gray-50 text-gray-900"}`}
     >
-      <header className="w-full sticky top-0 z-40 backdrop-blur bg-white/70 dark:bg-[#0f1722]/70 border-b border-gray-200 dark:border-[#293241]">
+      <header
+        className={`w-full sticky top-0 z-40 backdrop-blur ${isDarkMode ? "bg-black/5 border-[#293241]" : "bg-white/70 border-gray-200"}`}
+      >
         <div className="max-w-6xl mx-auto py-4 flex items-center justify-between">
           <a href="/" className="flex items-center gap-2 text-xl font-semibold text-[#E63946]">
             <span className="bg-[#E63946] text-white w-8 h-8 rounded-md flex items-center justify-center font-bold">M</span>
-            <span className="text-gray-800 dark:text-gray-100">MedIcons</span>
+            <span className={`text-gray-800 ${isDarkMode ? "text-white/90" : ""}`}>MedIcons</span>
           </a>
           <nav className="flex items-center gap-6 text-base font-semibold text-gray-700 dark:text-gray-200">
             <a href="https://github.com/MED-007/MEDIcons" target="_blank" rel="noopener" className="flex items-center gap-1 hover:text-[#E63946]">
-              <Github className="w-4 h-4" /> GitHub
+              <Github className={`w-4 h-4 ${isDarkMode ? "text-white/90" : ""}`} />
             </a>
             <a href="https://www.linkedin.com/in/mohamed-laaguidi-b03236207/" target="_blank" rel="noopener" className="flex items-center gap-1 hover:text-[#E63946]">
-              <Linkedin className="w-4 h-4" /> LinkedIn
+              <Linkedin className={`w-4 h-4 ${isDarkMode ? "text-white/90" : ""}`} />
             </a>
           </nav>
         </div>
@@ -303,7 +305,7 @@ export default function TechStackIcons() {
                     className={`w-3 h-3 rounded-full ${copiedIcon === icon.name ? 'bg-gray-500' : 'bg-gradient-to-br from-red-400 via-red-500 to-red-600 shadow-lg shadow-red-500/60 animate-pulse'}`}
                   />
                 </div>
-                <div className="flex items-center justify-center gap-2 w-full mt-2">
+                <div className="flex items-center justify-center gap-4 w-full mt-2">
                   <Copy
                     onClick={(e) => { e.stopPropagation(); copyToClipboard(icon) }}
                     className="w-4 h-4 text-gray-400 hover:text-[#E63946] cursor-pointer transition-colors"
